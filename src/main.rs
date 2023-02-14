@@ -21,7 +21,7 @@ fn main() {
     let _=stdout().flush();
     stdin().read_line(&mut day).expect("Did not enter a correct string");
     let day = format!("{:0>width$}", day.trim(), width=2);
-//combine day and year into single value
+    //combine day and year into single value
     let answer=format!("{year}.{day}");
     println!("Processing {answer}");
     //start a timer for run time of code
