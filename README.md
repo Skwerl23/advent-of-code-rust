@@ -10,4 +10,5 @@ it will ask you what year, and example is 15 or 21  (depending on what i've comp
 then it asks you the day. for example 03 or 15 (still depending on what i've completed)
 
 The main function uses a match statement to determine what mod to run based on your input. 
-It also uses use std::time::Instant to run a performance timer on the code you run.
+
+It also uses std::time::Instant to run a performance timer on the code you run.
