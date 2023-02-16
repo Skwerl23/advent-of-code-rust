@@ -17,7 +17,7 @@ fn main() {
     }
     //get day from user
     let mut day=String::with_capacity(3);
-    print!("What day do you want to run?: (day 1 through 6 have been solved)\n");
+    print!("What day do you want to run?: (day 1 through 7 have been solved)\n");
     let _=stdout().flush();
     stdin().read_line(&mut day).expect("Did not enter a correct string");
     let day = format!("{:0>width$}", day.trim(), width=2);
