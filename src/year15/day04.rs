@@ -6,14 +6,14 @@
 //and first 6 is 0,0,0 (hex 000000 is 3 0s in a row)
 pub fn day04() {
     //import data file
-    let input = "iwrupvqb".to_string();
+    let input = "iwrupvqb";
     //test data should result in 609043
     // let input = "abcdef".to_string();
     
     let mut iteration: i32 = 0;
 
     loop {
-        // concat string and iterator
+        // concat string and iterator - format! can convert string slice (literal)  or String to String. so that's helpful
         let value: String = format!("{input}{iteration}");
         // create digest of value
         let hash: md5::Digest = md5::compute(value) ;
