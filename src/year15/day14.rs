@@ -1,16 +1,16 @@
-pub fn day11() {
+pub fn day14() {
+    println!("This problem hasn't been solved. this is a copy of day 11 for the time being");
     let input = "hxbxwxba".to_string();
     let test_input = "ghijklmn".to_string();
     //curiously this gets set once, but it wants it to be mutable
-    let test_answer = solve_day11(test_input);
+    let test_answer = solve_day14(test_input);
     //get both test_answers, for validation
     if test_answer == ("ghjaabcc".to_string(), "ghjbbcdd".to_string()) {
         //explain passing, and run final test
         println!("Test case passed. Running actual input...");
-        let answer = solve_day11(input);
+        let answer = solve_day14(input);
         println!("Answer1 = {}", answer.0);
         println!("Answer2 = {}", answer.1);
-
     } 
     else {
         //explain and display failures.
@@ -21,7 +21,7 @@ pub fn day11() {
     }
 }
 
-fn solve_day11(input: String) -> (String, String) {
+fn solve_day14(input: String) -> (String, String) {
     //this function increments string letter by letter.
     let mut chars: Vec<char> = input.chars().collect();
     // let mut count = 0;
