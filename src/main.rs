@@ -38,6 +38,7 @@ fn main() {
         "15.08"=>{year15::day08::day08();},
         "15.09"=>{year15::day09::day09();},
         "15.10"=>{year15::day10::day10();},
+        "15.11"=>{year15::day11::day11();},
         _=>{println!("You entered an invalid Day. Exiting...");exit(0)}
     }
     //finalize timer and get elapsed time in seconds.
