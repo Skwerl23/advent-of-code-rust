@@ -2,7 +2,7 @@ use std::fs::read_to_string;
 use std::collections::HashMap;
 
 pub fn day14() {
-    println!("This problem hasn't been solved. this is a copy of day 11 for the time being");
+
     let input  = read_to_string(r#"c:\tools\adventofcode\2015\input14.txt"#).expect("Failed to read file.");
     let test_input = "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.\nDancer can fly 16 km/s for 11 seconds, but then must rest for 162 seconds.".to_string();
     //curiously this gets set once, but it wants it to be mutable
@@ -13,8 +13,6 @@ pub fn day14() {
         println!("Test case passed. Running actual input...");
         let answer = solve_day14(input, 2503);
         println!("Answer1 = {}", answer.0);
-        //648 too low: why?
-        //647 too low...
         println!("Answer2 = {}", answer.1);
     } 
     else {
