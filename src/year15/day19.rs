@@ -2,7 +2,6 @@ use std::fs::read_to_string;
 use std::collections::{HashMap, HashSet};
 use rand::seq::SliceRandom;
 use rand::thread_rng;
-use rand::rngs::ThreadRng;
 
 pub fn day19() {
     let input  = read_to_string(r#"c:\tools\adventofcode\2015\input19.txt"#).expect("Failed to read file.");
@@ -36,13 +35,11 @@ pub fn day19() {
             continue;
         }
         let change: Vec<&str> = line.split_whitespace().collect();
-        let key = change[0].to_string().chars().rev().collect::<String>();
-        let value = change[2].to_string().chars().rev().collect::<String>();
+        let key = change[0].to_string();
+        let value = change[2].to_string();
         changes_long.push((key, value));
     }
-    molecule = molecule.chars().rev().collect();
 
-    changes_long.reverse();
     let answer2 = day_19_solve_part2(&molecule, changes_long);
     println!("Answer 2 = {}", answer2);
 
@@ -69,41 +66,34 @@ fn day_19_solve_part1(molecule: &String, changes: &HashMap<&str, Vec<&str>>) -> 
     answer
 }
 fn day_19_solve_part2(molecule: &String, changes_long: Vec<(String, String)>) -> i32 {
-//i'm not sure this works in every scenario, you could put a limit to it releasing your count
 
-//from what i've found, this works if only 1 way is possible.
-//and since only 1 way to find e is viable, this works.
-
-    let mut molecule_new = molecule.clone();
+//so dfs didn't work, it just became astronomical. randomizing the list until you have an e. finds the answer rather fast.
+//that being said, if there were 2 ways, and 1 took longer, this would break.
+//there is only 1 way, it can be done in any order, but the same "way" - for example...
+//converting b to a, c to b, b to a. is the same as c to b, b to a, b to a.
+//so most randomized patterns of the solution work.
+//sorting the list by longest to shortest breaks my algorithm.
+// after a lot of testing, it averages about 4 runs per try. theoretically it could take infinite, but it averages 4
+    let mut working_molecule = String::new();
     let mut count:isize=0;
-    while molecule_new != "e" {
-        count = 0;
-        let mut molecule_len:isize = molecule_new.len() as isize;
-        let mut random_changes;
-        let mut rng: ThreadRng;
-        molecule_new = molecule.clone();
-        rng = thread_rng();
-        random_changes=changes_long.clone();
-        random_changes.shuffle(&mut rng);
-
-        while molecule_len > 1 {
-            let new_changes = random_changes.clone();
-            let mut change_applied = false;
-            for (value, key) in &new_changes {
-                if let Some(index) = molecule_new.find(&*key) {
-                    molecule_new.replace_range(index..index+key.len(), &value);
-                    count += 1;
-                    molecule_len = molecule_new.len() as isize;
-                    change_applied = true;
-                    break;
+    let mut random_changes = changes_long.clone();
+        while working_molecule != "e" {
+            count = 0; // reset 
+            working_molecule = molecule.clone(); //reset molecule from changes
+            random_changes.shuffle(&mut thread_rng()); //randomize the vector each attempt
+            let mut change_applied = true; //set check for loop
+            while change_applied {
+                change_applied = false; //reset each loop check
+                for (key, value) in &random_changes {
+                    if working_molecule.matches(value).count() > 0 {
+                        working_molecule = working_molecule.replacen(value, key, 1); //
+                        count += 1; //increment change count
+                        change_applied = true; // keep the loop running
+                        break; // this break isn't strictly necessary, but it speeds the process up dramatically.
+                    }
                 }
             }
-            if !change_applied {
-                break;
-            }
+
         }
-
-    }
-
     count as i32
 }
