@@ -1,7 +1,7 @@
-use std::{fs::read_to_string, cmp::max};
+use std::{fs::read_to_string, cmp::{max, min}};
 
 pub fn day21() {
-    // get input data (almost pointless, but it makes it universal.)
+    // get input data (almost pointless, but it makes it universal. with user data, not test data.)
     let input = read_to_string(r#"c:\tools\adventofcode\2015\input21.txt"#).expect("Failed to read file.");
     let boss: Vec<&str> = input.split_terminator('\n').collect();
 
@@ -57,16 +57,11 @@ fn recursive_fight(boss: &Vec<&str>) -> (i32, i32){
                         let defense = defensea+defenseb+defensec+defensed;
                         // if i win the fight we can check minimum cost
                         if battle_boss((attack, defense), &boss) {
-                            if cost < answer1 {
-                                answer1 = cost;
-                                // println!("cost = {cost}, attack = {attack}, defense = {defense}");
-                            }
+                            answer1 = min(answer1, cost);
                         }
                         // if we lose the fight, check maximum cost
                         else {
-                            if cost > answer2 {
-                                answer2 = cost;
-                            }
+                            answer2 = max(answer2, cost);
                         }
 
 
