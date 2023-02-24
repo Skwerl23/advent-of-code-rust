@@ -18,8 +18,8 @@ pub fn day03() {
     visited.insert((0, 0));
     double_visited.insert((0, 0));
 
-    let mut count = 0;
-    for character in input.chars() {
+    // let mut count = 0;
+    for (count, character) in input.chars().enumerate() {
         //change house based on character
         //if even move santa, for answer 2, else move robot
         match character {
@@ -45,7 +45,6 @@ pub fn day03() {
             },
             _ => {},
         }
-        count+=1;
         //insert visited values for answer1
         visited.insert((x,y));
 

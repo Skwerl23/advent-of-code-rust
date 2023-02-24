@@ -2,7 +2,7 @@ use std::fs::read_to_string;
 
 pub fn day17() {
     let input  = read_to_string(r#"c:\tools\adventofcode\2015\input17.txt"#).expect("Failed to read file.");
-    let split_input = input.split_terminator('\n');
+    let split_input = input.lines();
     // let mut test_inputs: Vec<i32> = [20, 15, 10, 5, 5].to_vec();
 
     let mut inputs: Vec<i32> = Vec::new();
@@ -49,16 +49,15 @@ fn get_combinations_of_least_containers(combinations: Vec<Vec<i32>>) -> i32 {
 
 
 fn get_combinations(inputs: &[i32], combinations: &mut Vec<Vec<i32>>, current_sum: i32, max_value: i32, seen: &mut Vec<i32>) {
-    let mut value: usize  = 0;
-    for i in inputs {
-        value+=1;
+
+    for (value,i) in inputs.iter().enumerate() {
  
-        seen.push(i.clone());
+        seen.push(*i);
         if i+current_sum == max_value {
             combinations.push(seen.clone());
             // println!("{:?}", seen);
         }
-        get_combinations(&inputs[value..], combinations, current_sum+i, max_value, seen);
+        get_combinations(&inputs[value+1..], combinations, current_sum+i, max_value, seen);
         seen.pop();
         
     }

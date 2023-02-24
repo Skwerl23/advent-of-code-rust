@@ -21,7 +21,7 @@ fn calculate_signal(input_lines: Vec<&str>, b: i32) -> i32 {
 
     //overwrite b for solution 2
     if b != 0 {
-        hash_map.insert(&"b", b);
+        hash_map.insert("b", b);
     }
     let mut count=0;
     while !hash_map.contains_key("a") {

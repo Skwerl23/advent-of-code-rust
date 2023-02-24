@@ -4,10 +4,10 @@ use std::cmp;
 pub fn day02() {
     //import data file
     let input = read_to_string(r#"c:\tools\adventofcode\2015\input02.txt"#).expect("Failed to read file");
-    let input_vector: Vec<&str> = input.lines().collect();
+    let input_vector = input.lines();
     let mut answer1 = 0;
     let mut answer2 = 0;
-    for package in input_vector.iter() {
+    for package in input_vector {
         let mut nums = package.split('x').map(|s| s.parse::<i32>().unwrap());
         let (a, b, c) = (nums.next().unwrap(), nums.next().unwrap(), nums.next().unwrap());
         let (x, y, z) = (a*b, b*c, a*c);

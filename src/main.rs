@@ -6,7 +6,7 @@ mod year15;
 fn main() {
     //get year from user
     let mut year=String::with_capacity(3);
-    print!("What year do you want to run?: (15 has been built)\n");
+    println!("What year do you want to run?: (15 has been built)");
     let _=stdout().flush();
     stdin().read_line(&mut year).expect("Did not enter a correct string");
     let year = format!("{:0>width$}", year.trim(), width=2);
@@ -17,7 +17,7 @@ fn main() {
     }
     //get day from user
     let mut day=String::with_capacity(3);
-    print!("What day do you want to run?: (day 1 through 8 have been solved)\n");
+    println!("What day do you want to run?: (day 1 through 8 have been solved)");
     let _=stdout().flush();
     stdin().read_line(&mut day).expect("Did not enter a correct string");
     let day = format!("{:0>width$}", day.trim(), width=2);

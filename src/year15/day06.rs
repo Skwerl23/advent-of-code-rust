@@ -29,10 +29,10 @@ pub fn day06() {
         //convert all fields into individual values
         let start: Vec<&str> = fields[2].split(',').collect();
         let end: Vec<&str> = fields[4].split(',').collect();
-        let start_x: i32 = start[0].parse().unwrap();
-        let start_y: i32 = start[1].parse().unwrap();
-        let end_x: i32 = end[0].parse().unwrap();
-        let end_y: i32 = end[1].parse().unwrap();
+        let start_x: usize = start[0].parse().unwrap();
+        let start_y: usize = start[1].parse().unwrap();
+        let end_x: usize = end[0].parse().unwrap();
+        let end_y: usize = end[1].parse().unwrap();
         if toggle {
             toggle_vec(start_x, end_x, start_y, end_y, &mut light_vec, &mut light_vec_part_2);
         }
@@ -40,8 +40,8 @@ pub fn day06() {
              change_vec(start_x, end_x, start_y, end_y, change_value, &mut light_vec, &mut light_vec_part_2);
         }
     }
-    let answer1: i32 = sum_vec(light_vec);
-    let answer2: i32 = sum_vec(light_vec_part_2);
+    let answer1: usize = sum_vec(light_vec);
+    let answer2: usize = sum_vec(light_vec_part_2);
 
     //print answers.
    println!("Answer 1 = {answer1}");
@@ -49,46 +49,43 @@ pub fn day06() {
 
 }
 
-fn change_vec(start_x: i32, end_x: i32, start_y: i32, end_y: i32, change_value: i32, light_vec: &mut Vec<Vec<i32>>, light_vec_part_2: &mut Vec<Vec<i32>>) {
+fn change_vec(start_x: usize, end_x: usize, start_y: usize, end_y: usize, change_value: usize, light_vec: &mut [Vec<usize>], light_vec_part_2: &mut [Vec<usize>]) {
     //this function turns the vector into 1 or 0; 
     //for answer two it adds or subtracts
     for i in start_x..=end_x {
         for j in start_y..=end_y {
-            light_vec[i as usize][j as usize] = change_value;
+            light_vec[i][j] = change_value;
             if change_value == 1 {
-                light_vec_part_2[i as usize][j as usize] += 1;
+                light_vec_part_2[i][j] += 1;
+            } else if let Some(result) = light_vec_part_2[i][j].checked_sub(1) {
+                    light_vec_part_2[i][j] = result;
+            } else {
+                light_vec_part_2[i][j] = 0;
             }
-            else {
-                light_vec_part_2[i as usize][j as usize] -= 1;
-                if light_vec_part_2[i as usize][j as usize] < 0 {
-                    light_vec_part_2[i as usize][j as usize] = 0;
-                }
-            }
+            
         }
     }
 }
 
-fn toggle_vec(start_x: i32, end_x: i32, start_y: i32, end_y: i32, light_vec: &mut Vec<Vec<i32>>, light_vec_part_2: &mut Vec<Vec<i32>>) {
+fn toggle_vec(start_x: usize, end_x: usize, start_y: usize, end_y: usize, light_vec: &mut [Vec<usize>], light_vec_part_2: &mut [Vec<usize>]) {
     //this function runs toggle commands
     //for answer 1 it swaps 0 and 1
     //for answer 2 it increases the value by 2
     for i in start_x..=end_x {
         for j in start_y..=end_y {
             // bitwise 1 XOR value = opposite of 1 or 0. XOR is ^ in rust.
-            light_vec[i as usize][j as usize] = 1 ^ light_vec[i as usize][j as usize];
-            light_vec_part_2[i as usize][j as usize] += 2;
+            light_vec[i][j] ^= 1;
+            light_vec_part_2[i][j] += 2;
         }
     }
 }
 
-fn sum_vec(vec_array: Vec<Vec<i32>>) -> i32 {
+fn sum_vec(vec_array: Vec<Vec<usize>>) -> usize {
     //this function just adds all the values in the array up.
-    let rows = vec_array.len();
-    let cols = vec_array[0].len();
     let mut answer = 0;
-    for i in 0..rows {
-        for j in 0..cols {
-            answer += vec_array[i as usize][j as usize];
+    for row in vec_array {
+        for col in row {
+            answer+=col;
         }
     }
     answer

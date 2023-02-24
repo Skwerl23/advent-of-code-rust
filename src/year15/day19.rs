@@ -4,8 +4,8 @@ use rand::seq::SliceRandom;
 use rand::thread_rng;
 
 pub fn day19() {
-    let input  = read_to_string(r#"c:\tools\adventofcode\2015\input19.txt"#).expect("Failed to read file.");
-    let split_input = input.split_terminator('\n');
+    let input = read_to_string(r#"c:\tools\adventofcode\2015\input19.txt"#).expect("Failed to read file.");
+    let split_input= input.lines();
     let mut molecule: String = "".to_string();
     let mut changes: HashMap<&str, Vec<&str>> = HashMap::new();
     for line in split_input.clone() {
@@ -54,18 +54,15 @@ fn day_19_solve_part1(molecule: &String, changes: &HashMap<&str, Vec<&str>>) -> 
                 uniquemolecules.insert(format!("{}{}{}", &molecule[0..i], v, &molecule[i+1..]));
             }
         }
-        if i != molecule.len()-1 {
-            if changes.contains_key(&molecule[i..i+2]) {
-                for v in &changes[&molecule[i..i+2]] {
-                    uniquemolecules.insert(format!("{}{}{}", &molecule[0..i], v, &molecule[i+2..]));
-                }
+        if i != molecule.len()-1 && changes.contains_key(&molecule[i..i+2]) {
+            for v in &changes[&molecule[i..i+2]] {
+                uniquemolecules.insert(format!("{}{}{}", &molecule[0..i], v, &molecule[i+2..]));
             }
         }
     }
-    let answer = uniquemolecules.len();
-    answer
+    uniquemolecules.len()
 }
-fn day_19_solve_part2(molecule: &String, changes_long: Vec<(String, String)>) -> i32 {
+fn day_19_solve_part2(molecule: &str, changes_long: Vec<(String, String)>) -> i32 {
 
 //so dfs didn't work, it just became astronomical. randomizing the list until you have an e. finds the answer rather fast.
 //that being said, if there were 2 ways, and 1 took longer, this would break.
@@ -76,10 +73,10 @@ fn day_19_solve_part2(molecule: &String, changes_long: Vec<(String, String)>) ->
 // after a lot of testing, it averages about 4 runs per try. theoretically it could take infinite, but it averages 4
     let mut working_molecule = String::new();
     let mut count:isize=0;
-    let mut random_changes = changes_long.clone();
+    let mut random_changes = changes_long;
         while working_molecule != "e" {
             count = 0; // reset 
-            working_molecule = molecule.clone(); //reset molecule from changes
+            working_molecule = molecule.to_string(); //reset molecule from changes
             random_changes.shuffle(&mut thread_rng()); //randomize the vector each attempt
             let mut change_applied = true; //set check for loop
             while change_applied {

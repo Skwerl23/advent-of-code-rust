@@ -94,13 +94,7 @@ fn valid_chars(chars: &Vec<char>)-> bool {
         }
     }
 
-    //if all 3 are true, set answer to true. and finally return answer.
-    let answer: bool;
-    if three_increment && bad_chars && double_match_count > 1{
-        answer = true;
-    }
-    else {
-        answer = false;
-    }
-    answer
+    //if all 3 are true, set answer to true. return true, else false.
+    three_increment && bad_chars && double_match_count > 1
+    
 }

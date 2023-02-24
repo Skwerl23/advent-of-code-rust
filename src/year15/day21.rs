@@ -3,7 +3,7 @@ use std::{fs::read_to_string, cmp::{max, min}};
 pub fn day21() {
     // get input data (almost pointless, but it makes it universal. with user data, not test data.)
     let input = read_to_string(r#"c:\tools\adventofcode\2015\input21.txt"#).expect("Failed to read file.");
-    let boss: Vec<&str> = input.split_terminator('\n').collect();
+    let boss: Vec<&str> = input.lines().collect();
 
     // get answers for part 1 and 2
     let (answer1, answer2)= recursive_fight(&boss);
@@ -16,7 +16,7 @@ pub fn day21() {
 
 
 
-fn recursive_fight(boss: &Vec<&str>) -> (i32, i32){
+fn recursive_fight(boss: &[&str]) -> (i32, i32){
     let mut answer1 = i32::MAX;
     let mut answer2 = 0;
     //all the data from the webpage hard coded in
@@ -56,7 +56,7 @@ fn recursive_fight(boss: &Vec<&str>) -> (i32, i32){
                         let attack = attacka+attackb+attackc+attackd;
                         let defense = defensea+defenseb+defensec+defensed;
                         // if i win the fight we can check minimum cost
-                        if battle_boss((attack, defense), &boss) {
+                        if battle_boss((attack, defense), boss) {
                             answer1 = min(answer1, cost);
                         }
                         // if we lose the fight, check maximum cost
@@ -73,8 +73,9 @@ fn recursive_fight(boss: &Vec<&str>) -> (i32, i32){
 }
 
 
-fn battle_boss(loadout: (i32, i32), boss: &Vec<&str>) -> bool{
+fn battle_boss(loadout: (i32, i32), boss: &[&str]) -> bool{
     // initialize values
+    // we take the last value of each line of "boss" input. to get boss data.
     let mut boss_hp: i32 = boss[0].split_whitespace().last().unwrap().parse().unwrap();
     let boss_dmg: i32 = boss[1].split_whitespace().last().unwrap().parse().unwrap();
     let boss_def: i32 = boss[2].split_whitespace().last().unwrap().parse().unwrap();
@@ -91,11 +92,7 @@ fn battle_boss(loadout: (i32, i32), boss: &Vec<&str>) -> bool{
         }
     }
     // did boss win or you? return answer.
-    if boss_hp > 0 {
-        false
-    }   else {
-        true
-    }
+    ! boss_hp > 0 
 
 
 }

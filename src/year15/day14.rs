@@ -25,7 +25,7 @@ pub fn day14() {
 }
 
 fn solve_day14(input: String, timelimit: i32) -> (i32, i32) {
-    let split_input: Vec<&str> = input.split_terminator('\n').collect();
+    let split_input: Vec<&str> = input.lines().collect();
     //each half is completely different and works differently, thus 2 different functions
 
     //this function loops for each second, and determines the reindeers distance, and the winner

@@ -34,14 +34,13 @@ fn solve_day13(input: String) -> (i32, i32) {
         people.insert(data_vec[10].trim_end_matches('.'));
         let left = data_vec[0];
         let right = data_vec[10].trim_end_matches('.');
-        let happiness;
-        if data_vec[2] == "gain" {
-            happiness = data_vec[3].parse::<i32>().unwrap();
+
+        let happiness = if data_vec[2] == "gain" {
+            data_vec[3].parse::<i32>().unwrap()
         }
         else {
-            happiness = 0 - data_vec[3].parse::<i32>().unwrap();
-        }
-        
+            0 - data_vec[3].parse::<i32>().unwrap()
+        };        
 
         happiness_vectors.push((left, right, happiness));
         // happiness_vectors.push((right, left, happiness));
@@ -50,24 +49,24 @@ fn solve_day13(input: String) -> (i32, i32) {
     let mut max_happiness: i32 = 0;
     let mut max_happiness_with_me: i32 = 0;
     for person in &people {
-        seen.push(&person);
+        seen.push(person);
         find_shortest_path(person, &mut seen, 0,  &mut max_happiness, &mut max_happiness_with_me, &people, &happiness_vectors);
         seen.pop();
     }
     (max_happiness, max_happiness_with_me)
 }
 
-fn find_shortest_path<'a> (current_location: &str, mut seen: &mut Vec<&'a str>, current_happiness: i32, max_happiness: &mut i32, max_happiness_with_me: &mut i32, people: &HashSet<&str>, happiness_vectors: &Vec<(&str, &'a str, i32)>)  {
-    if &seen.len() == &people.len() {
+fn find_shortest_path<'a> (current_location: &str, seen: &mut Vec<&'a str>, current_happiness: i32, max_happiness: &mut i32, max_happiness_with_me: &mut i32, people: &HashSet<&str>, happiness_vectors: &Vec<(&str, &'a str, i32)>)  {
+    if seen.len() == people.len() {
         let mut final_value: i32= 0;
         //with out me, we find nearest peoples happiness vector.
         for seating_arrangement in happiness_vectors {
             let (left, right, happiness_value) = &seating_arrangement;
             if left == &seen[seen.len()-1] && right == &seen[0]{
-                final_value += happiness_value.clone();
+                final_value += happiness_value;
             } 
             if right == &seen[seen.len()-1] && left == &seen[0]{
-                final_value += happiness_value.clone();
+                final_value += happiness_value;
             } 
         }
         
@@ -90,12 +89,10 @@ fn find_shortest_path<'a> (current_location: &str, mut seen: &mut Vec<&'a str>, 
             } 
         }
 
-        if left == &current_location {
-            if !seen.contains(right) {
-                seen.push(right.clone());
-                find_shortest_path(right, &mut seen, current_happiness+happiness_value+backwards_happiness, max_happiness, max_happiness_with_me, &people, &happiness_vectors);
+        if left == &current_location && !seen.contains(right) {
+                seen.push(&right[..]);
+                find_shortest_path(right, seen, current_happiness+happiness_value+backwards_happiness, max_happiness, max_happiness_with_me, people, happiness_vectors);
                 seen.pop();
-            }
         }
     }
 }

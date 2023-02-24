@@ -23,7 +23,7 @@ pub fn day09() {
 }
 
 fn solve_day09(input: String) -> (i32, i32) {
-    let input_lines = input.split_terminator('\n');
+    let input_lines = input.lines();
     let mut distance_vectors:Vec<(&str, &str, i32)> = Vec::new();
 
     let mut destinations: HashSet<&str> = HashSet::new();
@@ -41,7 +41,7 @@ fn solve_day09(input: String) -> (i32, i32) {
     let mut min_travel_distance: i32 = i32::max_value();
     let mut max_travel_distance: i32 = 0;
     for destination in destinations.iter() {
-        seen.insert(&destination);
+        seen.insert(destination);
         find_shortest_path(destination, &mut seen, 0, &mut min_travel_distance, &mut max_travel_distance, &destinations, &distance_vectors);
         seen.remove(destination);
     }
@@ -49,8 +49,8 @@ fn solve_day09(input: String) -> (i32, i32) {
     (min_travel_distance, max_travel_distance)
 }
 
-fn find_shortest_path<'a> (current_location: &str, mut seen: &mut HashSet<&'a str>, current_travel_distance: i32, min_travel_distance: &mut i32, max_travel_distance: &mut i32, destinations: &HashSet<&str>, distance_vectors: &Vec<(&str, &'a str, i32)>)  {
-    if &seen.len() == &destinations.len() {
+fn find_shortest_path<'a> (current_location: &str, seen: &mut HashSet<&'a str>, current_travel_distance: i32, min_travel_distance: &mut i32, max_travel_distance: &mut i32, destinations: &HashSet<&str>, distance_vectors: &Vec<(&str, &'a str, i32)>)  {
+    if seen.len() == destinations.len() {
         // println!("{:?},{}", seen, current_travel_distance);
         if current_travel_distance < *min_travel_distance {
             *min_travel_distance = current_travel_distance;
@@ -61,14 +61,12 @@ fn find_shortest_path<'a> (current_location: &str, mut seen: &mut HashSet<&'a st
         
     }
     for route in distance_vectors {
-        let (left, right, distance) = &route;
+        let (left, right, distance) = route;
         
-        if left == &current_location {
-            if !seen.contains(right) {
-                seen.insert(right.clone());
-                find_shortest_path(right, &mut seen, current_travel_distance+distance, min_travel_distance, max_travel_distance, &destinations, &distance_vectors);
-                seen.remove(right.clone());
-            }
+        if left == &current_location && !seen.contains(right) {
+            seen.insert(&right[..]);
+            find_shortest_path(right, seen, current_travel_distance+distance, min_travel_distance, max_travel_distance, destinations, distance_vectors);
+            seen.remove(&right[..]);
         }
     }
 }

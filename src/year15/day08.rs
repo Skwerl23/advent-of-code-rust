@@ -4,7 +4,7 @@ pub fn day08() {
     // import data file
     let input = read_to_string(r#"c:\tools\adventofcode\2015\input08.txt"#).expect("Failed to read file");
     // input = "\"\"\n\"abc\"\n\"aaa\\\"aaa\"\n\"\\x27".to_string();
-    let input_lines: Vec<&str> = input.split_terminator('\n').collect();
+    let input_lines = input.lines();
     let mut total_bytes = 0;
     let mut line_bytes = 0;
     let mut extended_bytes = 0;
@@ -33,9 +33,9 @@ pub fn day08() {
         //add 2 to line length (for new external quotes)
         extended_bytes += i.len()+2;
         //escape all \'s (count every back slash) 
-        extended_bytes+= i.matches("\\").count();
+        extended_bytes+= i.matches('\\').count();
         //escape all "'s (count every quote)
-        extended_bytes+= i.matches("\"").count();
+        extended_bytes+= i.matches('\"').count();
 
     }
     //both answers require the difference value for solution.

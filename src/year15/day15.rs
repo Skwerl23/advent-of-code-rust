@@ -31,7 +31,7 @@ struct Ingredient {
 }
 
 fn solve_day14(input: String) -> (i32, i32) {
-    let split_input: Vec<&str> = input.split_terminator('\n').collect();
+    let split_input = input.lines();
     let mut ingredients: Vec<Ingredient> = Vec::new();
     for i in split_input {
         let parts: Vec<&str> = i.split_whitespace().collect();
@@ -105,8 +105,8 @@ fn increment_combination(combination: &mut [i32]) -> bool {
     for i in (0..combination.len()).rev() {
         if combination[i] < 100 {
             combination[i] += 1;
-            for j in (i + 1)..combination.len() {
-                combination[j] = 0;
+            for value in combination.iter_mut().skip(i+1) {
+                *value = 0;
             }
             return true;
         }

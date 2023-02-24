@@ -16,7 +16,7 @@ perfumes: i32,
 
 pub fn day16() {
     let input  = read_to_string(r#"c:\tools\adventofcode\2015\input16.txt"#).expect("Failed to read file.");
-    let split_input = input.split_terminator('\n');
+    let split_input = input.lines();
     let mut aunt_hashmap: HashMap<usize, AuntStats> = HashMap::new();
     for i in 1..=input.matches('\n').count() {
         aunt_hashmap.insert(i, AuntStats { children: -1, cats: -1, samoyeds: -1, pomeranians: -1, akitas: -1, vizslas: -1, goldfish: -1, trees: -1, cars: -1, perfumes: -1 });

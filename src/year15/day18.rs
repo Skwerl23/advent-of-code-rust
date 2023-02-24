@@ -3,59 +3,58 @@ use std::fs::read_to_string;
 pub fn day18() {
     let input: String  = read_to_string(r#"c:\tools\adventofcode\2015\input18.txt"#).expect("Failed to read file.");
     // let input: String = ".#.#.#\n...##.\n#....#\n..#...\n#.#..#\n####..".to_string();
-    let split_input: Vec<&str> = input.split_terminator('\n').collect();
+    let split_input: Vec<&str> = input.lines().collect();
     let width: usize = split_input[0].len();
     let height: usize = split_input.len();
     //build starting grid from scratch
-    let mut actual_grid: Vec<Vec<bool>> = build_starting_grid(height, split_input.clone(), width);
+    let mut actual_grid: Vec<Vec<bool>> = build_starting_grid(&input);
     //use secondary grid, so changes don't effect our grid per round
     //in other words, make changes based on original grid,
     let mut working_grid: Vec<Vec<bool>> = actual_grid.clone();
     //dont enforce cornerlights stay on
     let mut corner_lights = false;
     calculate_grid(height, width, &mut actual_grid, &mut working_grid, corner_lights);
-    let answer1: i32 = calculate_lights_on(height, width, actual_grid);
+    let answer1: i32 = calculate_lights_on(actual_grid);
 
     //rebuild grid from starting position
-    let mut actual_grid: Vec<Vec<bool>> = build_starting_grid(height, split_input.clone(), width);
+    // let mut actual_grid: Vec<Vec<bool>> = build_starting_grid(height, split_input.clone(), width);
+    let mut actual_grid: Vec<Vec<bool>> = build_starting_grid(&input);
     let mut working_grid: Vec<Vec<bool>> = actual_grid.clone();
     //enforce cornerlights stay on
     corner_lights = true;
     //find new final grid
     calculate_grid(height, width, &mut actual_grid, &mut working_grid, corner_lights);
     //get final number of lights on
-    let answer2: i32 = calculate_lights_on(height, width, actual_grid);
+    let answer2: i32 = calculate_lights_on(actual_grid);
 
     println!("Answer 1 = {}", answer1);
     println!("Answer 2 = {}", answer2);
 }
 
-fn calculate_lights_on(height: usize, width: usize, actual_grid: Vec<Vec<bool>>) -> i32 {
+fn calculate_lights_on(actual_grid: Vec<Vec<bool>>) -> i32 {
     //loop through all grid items and sum the number of lights on.
     let mut answer1 = 0;
-    for i in 0..height {
-        for j in 0..width {
-            if actual_grid[i][j] {
-                answer1+=1;
-            }
+    for row in actual_grid {
+        for col in row {
+            if col {answer1+=1}
         }
     }
     answer1
 }
 
-fn build_starting_grid(height: usize, split_input: Vec<&str>, width: usize) -> Vec<Vec<bool>> {
-    //simple function that makes a grid based on height and widht of split_input
-    let mut actual_grid: Vec<Vec<bool>> =  vec![vec![false; width]; height];
-    for line in 0..height {
-        let line_vec: Vec<char> = split_input[line].to_string().chars().collect();
-        for i in 0..width {
-            actual_grid[line][i] = line_vec[i] == '#';
-        }
-    }
-    actual_grid
+fn build_starting_grid(input: &str) -> Vec<Vec<bool>> {
+    input
+        // split input into lines
+        .lines()
+        //map each line to characters, and then each character is turned into a bool if it is '#' char or not
+        .map(|line| line.chars().map(|character|character == '#')
+        // collect the chars into a Vec
+        .collect())
+        // collect the lines into a vec
+        .collect()
 }
 
-fn calculate_grid(height: usize, width: usize, actual_grid: &mut Vec<Vec<bool>>, working_grid: &mut Vec<Vec<bool>>, corner_lights: bool) {
+fn calculate_grid(height: usize, width: usize, actual_grid: &mut Vec<Vec<bool>>, working_grid: &mut [Vec<bool>], corner_lights: bool) {
     // loop through all light changes (puzzle asked for 100 loops)
     for _ in 0..100 {
         //get grid points
@@ -86,7 +85,7 @@ fn calculate_grid(height: usize, width: usize, actual_grid: &mut Vec<Vec<bool>>,
                 working_grid[height-1][width-1] = true;
             }
         }
-        *actual_grid = working_grid.clone();
+        *actual_grid = working_grid.to_vec();
     }
 }
 fn get_num_of_neighbors(position: (i32, i32), actual_grid: &Vec<Vec<bool>>) -> i32 {

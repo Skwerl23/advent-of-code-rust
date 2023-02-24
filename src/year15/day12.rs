@@ -66,7 +66,7 @@ fn iterate_json_object(object: &Value, sum: &mut i64, non_red_sum: &mut i64, don
         Value::Object(map) => {
             // If the object is a map, recursively iterate over its values
             let mut parent_node = true;
-            if *dont_add_because_red_exists == true {
+            if *dont_add_because_red_exists {
                 parent_node = false;
             }            
             if let Value::Object(map) = object {

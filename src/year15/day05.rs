@@ -57,15 +57,13 @@ pub fn day05() {
             let pair_name = format!("{}{}", input_chars[j],input_chars[j+1]);
             
             //if the hashmap has the key, we've found this pair before.
-            if pairs.contains_key(&pair_name) {
+            if let std::collections::hash_map::Entry::Vacant(e) = pairs.entry(String::from(&pair_name)) {
+                e.insert(j);
+            } else {
                 //check the current index against first pair found, if they are further apart than 1, we have a winner
                 if j - pairs[&pair_name] > 1 {
                     pair_nice = true;
                 }
-            }
-            // otherwise add current name to hashmap
-            else {
-                pairs.insert(pair_name, j);
             }
         }
         //loop through chars gapped and check for match. xyx zaz etc... if match found, it's "nice"
