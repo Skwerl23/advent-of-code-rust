@@ -26,7 +26,7 @@ fn main() {
     println!("Processing {answer}");
     //start a timer for run time of code
     let now = Instant::now();
-    //validate day/year combination and run if possible
+
     match &answer[..] { 
         "15.01"=>{year15::day01::day01();},
         "15.02"=>{year15::day02::day02();},
@@ -49,9 +49,13 @@ fn main() {
         "15.19"=>{year15::day19::day19();},
         "15.20"=>{year15::day20::day20();},
         "15.21"=>{year15::day21::day21();},
+        "15.23"=>{year15::day23::day23();},
         _=>{println!("You entered an invalid Day. Exiting...");exit(0)}
     }
     //finalize timer and get elapsed time in seconds.
     let elapsed = now.elapsed();
     println!("Total Run Time: {:.2?}", elapsed);
 }
+
+
+
